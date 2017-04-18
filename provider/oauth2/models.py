@@ -83,6 +83,10 @@ class Client(models.Model):
     def is_socialbase(self):
       return self.client_type in constants.SOCIALBASE_CLIENTS
 
+    @property
+    def is_sso_hydrogen(self):
+      return self.client_type == constants.SSO_HYDROGEN_OPENAPI
+
     @classmethod
     def deserialize(cls, data):
         if not data:
