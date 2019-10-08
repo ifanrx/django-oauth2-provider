@@ -37,7 +37,7 @@ class Migration(migrations.Migration):
                 ('client_secret', models.CharField(default=provider.utils.long_token, max_length=255)),
                 ('client_type', models.IntegerField(choices=[(0, b'Confidential (Web applications)'), (1, b'Public (Native and JS applications)'), (2, b'Insecure applications'), (3, b'SSO end-user application Confidential (Web applications)'), (4, b'SSO end-user application Public (Native and JS applications)'), (4, b'SSO end-user application Insecure applications')])),
                 ('client_extra_attr', models.TextField(blank=True)),
-                ('user', models.ForeignKey(related_name='oauth2_client', blank=True, to=settings.AUTH_USER_MODEL, null=True)),
+                ('user', models.ForeignKey(related_name='oauth2_client', blank=True, to=settings.AUTH_USER_MODEL, null=True, on_delete=models.deletion.CASCADE)),
             ],
             options={
             },
@@ -52,8 +52,8 @@ class Migration(migrations.Migration):
                 ('redirect_uri', models.CharField(max_length=255, blank=True)),
                 ('scope', models.IntegerField(default=0)),
                 ('extra_data', models.TextField(blank=True)),
-                ('client', models.ForeignKey(to='provider.Client')),
-                ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
+                ('client', models.ForeignKey(to='provider.Client', on_delete=models.deletion.CASCADE)),
+                ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.deletion.CASCADE)),
             ],
             options={
             },
@@ -65,9 +65,9 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('token', models.CharField(default=provider.utils.long_token, max_length=255)),
                 ('expired', models.BooleanField(default=False)),
-                ('access_token', models.OneToOneField(related_name='refresh_token', to='provider.AccessToken')),
-                ('client', models.ForeignKey(to='provider.Client')),
-                ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
+                ('access_token', models.OneToOneField(related_name='refresh_token', to='provider.AccessToken', on_delete=models.deletion.CASCADE)),
+                ('client', models.ForeignKey(to='provider.Client', on_delete=models.deletion.CASCADE)),
+                ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.deletion.CASCADE)),
             ],
             options={
             },
@@ -76,13 +76,13 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='accesstoken',
             name='client',
-            field=models.ForeignKey(to='provider.Client'),
+            field=models.ForeignKey(to='provider.Client', on_delete=models.deletion.CASCADE),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='accesstoken',
             name='user',
-            field=models.ForeignKey(to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.deletion.CASCADE),
             preserve_default=True,
         ),
     ]
